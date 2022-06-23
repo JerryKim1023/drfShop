@@ -22,5 +22,6 @@ from drfShop import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.show_main_page, name='show_mainpage'),
-    # path('user/', include("user.urls"), name='user_view'),
+    path('sample/', views.show_sample_page, name='show_mainpage'),
+    path('user/', include("user.urls"), name='user_view'),
 ]
