@@ -66,7 +66,6 @@ class UserSerializer(serializers.ModelSerializer):
 
         # User object 생성
         user = UserModel(**validated_data)
-
         user.set_password(user.password)
         user.save()
 

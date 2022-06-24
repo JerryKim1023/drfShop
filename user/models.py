@@ -32,8 +32,7 @@ class User(AbstractBaseUser):
 
     username = models.CharField("사용자 계정", max_length=20, unique=True)
     email = models.EmailField("이메일 주소", max_length=100)
-    phone_number = models.CharField("전화번호", max_length=30, unique=True) 
-    # # 슈퍼유저를 폰넘버 만들기 전에 만들어서 makemigrations가 안 됨. 나중에 추가할 때 user 삭제 후 사용하기
+    phone_number = models.CharField("전화번호", max_length=30, unique=True)
     password = models.CharField("비밀번호", max_length=128)
     fullname = models.CharField("이름", max_length=20)
     join_date = models.DateTimeField("가입일", auto_now_add=True)
@@ -82,7 +81,7 @@ class User(AbstractBaseUser):
     # REQUIRED_FIELDS = []
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(to=User, verbose_name="구매자", on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(to=User, verbose_name="사용자", on_delete=models.CASCADE, primary_key=True)
     interests = models.ManyToManyField(to="Interest", verbose_name="흥미")
     introduction = models.TextField("소개")
     birthday = models.DateField("생일")

@@ -20,7 +20,9 @@ from django.urls import include, path
 from drfShop import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin', admin.site.urls),
     path('', views.show_main_page, name='show_mainpage'),
-    path('user/', include("user.urls"), name='user_view'),
+    path('user', include("user.urls"), name='user_view'),
+    path('userchoice', include("userchoice.urls"), name='userchoice_view'),
+    path('product', include("product.urls"), name='product_view'),
 ]

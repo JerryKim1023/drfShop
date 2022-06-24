@@ -29,10 +29,10 @@ class UserAdmin(BaseUserAdmin):
     list_display_links = ('id', 'username', )
     list_filter = ('fullname', )
     search_fields = ('username', )
-    readonly_fields = ('username', 'join_date', )
+    readonly_fields = ('join_date', )
 
     fieldsets = (
-        ("info", {'fields': ('username', "password", 'fullname', 'gender', 'join_date')}),
+        ("info", {'fields': ('username', "password", 'phone_number', 'fullname', 'gender', 'join_date')}),
         ('permissions', {'fields': ('is_admin', 'is_active', 'is_seller')}),
     )
 
