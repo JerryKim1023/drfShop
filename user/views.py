@@ -27,8 +27,8 @@ class UserSignupView(APIView):
     # 같은 취미를 가진 사람들을 출력하기
     permission_classes = [permissions.AllowAny]
     def get(self, request):
-        user = request.user
-        # user = UserModel.objects.all().order_by('?').first()
+        # user = request.user
+        user = UserModel.objects.all().order_by('?').first()
         # user = UserModel.objects.get(id=12)
         # serializer에 queryset을 인자로 줄 경우 many=True 옵션을 사용해야 한다.
         serialized_user_data = UserSerializer(user).data # 오브젝트를 넣어서 직렬화해주기
