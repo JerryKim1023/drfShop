@@ -1,5 +1,10 @@
 from django.db import models
 
+
+import userchoice
+import seller
+# from userchoice.models import Like as LikeModel
+
 # Create your models here.
 class Category(models.Model):
     class Meta:
@@ -26,8 +31,11 @@ class Product(models.Model):
     show_expired_date = models.DateField("노출 종료일", (""),auto_now=False, auto_now_add=False) # 노출 종료일
 
     stock = models.IntegerField("재고")
+    product_like = models.ManyToManyField('userchoice.Like', verbose_name="좋아요")
 
     is_active = models.BooleanField("활성화 여부", default=True)  # 활성화 여부
+
+    
 
     def __str__(self):
         return f"{self.title} 입니다"
@@ -35,14 +43,15 @@ class Product(models.Model):
 class ProductOption(models.Model):
     class Meta:
         db_table = "product_option"
+
     product = models.OneToOneField(to=Product, verbose_name="상품", on_delete=models.CASCADE, primary_key=True)
-    name = models.CharField("상품옵션이름", max_length=50)
+    options = models.ForeignKey("seller.Option", verbose_name="옵션", on_delete=models.CASCADE, max_length=50)
     quantity = models.IntegerField("수량")
-    size = models.CharField("사이즈", max_length=10)
+    sizes = models.ForeignKey("seller.Size", verbose_name="사이즈", on_delete=models.CASCADE, max_length=10)
     price = models.IntegerField("가격")
 
     def __str__(self):
-        return self.name
+        return self.options
 
 
 
