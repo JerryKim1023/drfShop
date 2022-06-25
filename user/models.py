@@ -9,6 +9,7 @@ class UserManager(BaseUserManager): # 커스텀 User를 쓰려면 무조건 정�
         if not username:
             raise ValueError('Users must have an username')
         user = self.model(
+            # email=self.normalize_email(email),
             username=username,
         )
         user.set_password(password)
@@ -19,7 +20,7 @@ class UserManager(BaseUserManager): # 커스텀 User를 쓰려면 무조건 정�
     def create_superuser(self, username, password):
         user = self.create_user(
             username=username,
-            password=password
+            password=password,
         )
         user.is_admin = True
         user.save(using=self._db)
