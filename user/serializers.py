@@ -18,7 +18,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         # fields = "__all__"
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     userprofile = UserProfileSerializer()
 
@@ -26,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         # serializer에 사용될 model, field지정
         model = UserModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["username", "fullname", "email", "phone_number", "password",  "gender", "join_date", "userprofile"]  
+        fields = ["username", "fullname", "email", "phone_number", "password",  "gender", "join_date", "is_seller", "userprofile"]  
         # 각 필드에 해당하는 다양한 옵션 지정
         extra_kwargs = {
             # write_only : 해당 필드를 쓰기 전용으로 만들어 준다.
