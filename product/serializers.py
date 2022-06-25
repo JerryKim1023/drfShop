@@ -6,6 +6,8 @@ from product.models import Product as ProductModel
 from product.models import ProductOption as ProductOptionModel
 from product.models import Category as CategoryModel
 
+from userchoice.models import Like as LikeModel
+
 from datetime import datetime, timedelta
 from django.utils import timezone
 
@@ -72,7 +74,7 @@ class ProductOptionSerializer(serializers.ModelSerializer):
         # serializer에 사용될 model, field지정
         model = ProductOptionModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["product", "name", "quantity", "size", "price", ]
+        fields = ["product", "options", "quantity", "size", "price", ]
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -81,3 +83,24 @@ class CategorySerializer(serializers.ModelSerializer):
         model = CategoryModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
         fields = "__all__"
+
+
+
+class LikeCountSerializer(serializers.ModelSerializer):
+    # serializers.SerializerMethodField()를 사용해 원하는 필드를 생성한다.
+    like_count = serializers.SerializerMethodField()
+    
+    def get_like_count(self, obj):
+        return obj.like_set.count()
+    
+    
+    def get_same_hobby_users(self, obj):
+        user_list = []
+        for user_profile in obj.userprofile_set.all():
+            user_list.append(user_profile.user.username)
+
+        return user_list
+
+    class Meta:
+        model = LikeModel
+        fields = ["user", "product", "like_count"]
