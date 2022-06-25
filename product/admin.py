@@ -21,6 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
 
         "thumbnail_preview",
     )
+    readonly_fields = ('product_like', )
     def thumbnail_preview(self, obj):
         return mark_safe(f'<img src="/product/thumbnail/{obj.id}/" height="100px"/>')
 
@@ -29,7 +30,7 @@ class ProductAdmin(admin.ModelAdmin):
 class ProductOptionAdmin(admin.ModelAdmin):
     list_display = (
         "product", 
-        "name",
+        "options",
         "quantity",
         "size",
         "price"
