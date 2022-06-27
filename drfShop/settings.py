@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'product',
     'userchoice',
+    'seller',
 
 ]
 
@@ -57,8 +58,14 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser'
-    ]
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer'
+    ],
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
