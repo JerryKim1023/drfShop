@@ -1,0 +1,90 @@
+{% load static %}
+
+<main>
+    <!--Main layout-->
+    <div class="container">
+      <div class="row">
+  
+        <!--Sidebar-->
+        <div class="col-lg-4 wow fadeIn" data-wow-delay="0.2s">
+  
+          <div class="widget-wrapper">
+            <h4>Categories:</h4>
+            <br>
+            <div class="list-group">
+              <a href="#" class="list-group-item active">Woman</a>
+              <a href="#" class="list-group-item">Man</a>
+              <a href="#" class="list-group-item">Shoes</a>
+              <a href="#" class="list-group-item">T-shirt</a>
+              <a href="#" class="list-group-item">Jewellery</a>
+            </div>
+          </div>
+  
+          <div class="widget-wrapper wow fadeIn" data-wow-delay="0.4s">
+            <h4>Subscription form:</h4>
+            <br>
+            <div class="card">
+              <div class="card-block">
+                <p><strong>Subscribe to our newsletter</strong></p>
+                <p>Once a week we will send you a summary of the most useful news</p>
+                <div class="md-form">
+                  <i class="fa fa-user prefix"></i>
+                  <input type="text" id="form1" class="form-control">
+                  <label for="username">ID</label>
+                </div>
+                <div class="md-form">
+                  <i class="fa fa-envelope prefix"></i>
+                  <input type="text" id="form2" class="form-control">
+                  <label for="password">password</label>
+                </div>
+                <button class="btn btn-default">Submit</button>
+  
+              </div>
+            </div>
+          </div>
+  
+        </div>
+        <!--/.Sidebar-->
+  
+        <!--Main column-->
+        <div class="col-lg-8">
+            <div class="login_box">
+                <div class="container" style="max-width: 600px;">
+                    <img src="https://image.freepik.com/free-vector/large-bookcase-with-books-library-book-shelf-interior_92863-357.jpg"
+                         class="img-fluid" alt="Responsive image">
+                    <div class="info">
+                        <h1>읽은 책에 대해 말씀해주세요.</h1>
+                        <p>다른 사람을 위해 리뷰를 남겨주세요! 다 같이 좋은 책을 읽는다면 다 함께 행복해질 수 있지 않을까요?</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">제목</span>
+                            </div>
+                            <input type="text" class="form-control" id="title">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">저자</span>
+                            </div>
+                            <input type="text" class="form-control" id="author">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">리뷰</span>
+                            </div>
+                            <textarea class="form-control" id="bookReview"
+                                      cols="30"
+                                      rows="5" placeholder="140자까지 입력할 수 있습니다."></textarea>
+                        </div>
+                        <div class="review">
+                            <button onclick="makeReview()" type="button" class="btn btn-primary">리뷰 작성하기</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <!--/.Main column-->
+  
+      </div>
+    </div>
+    <!--/.Main layout-->
+  
+  </main>

@@ -56,9 +56,15 @@
                           <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
                       </button>
                   </form>
-                  <button style="font-size:16px"><i class="fa fa-user-o"></i> 로그인</button>
-                  <button style="font-size:16px"><i class="fa fa-user-plus"></i> 회원가입</button>
-                  <button style="font-size:16px"><i class="fa fa-user"></i> 로그아웃</button>
+                {% if not user.is_authenticated %}
+                    <button style="font-size:16px"><a href="/user/login"><i class="fa fa-user-o"></i> 로그인</a></button>
+                    <button style="font-size:16px"><a href="/user/signup"><i class="fa fa-user-plus"></i> 회원가입</a></button>
+                {% elif user.is_seller %}
+                    <button style="font-size:16px"><a href="/product/sell"><i class="fa fa-user-o"></i> 상품 올리기</a></button>
+                    <button style="font-size:16px"><a href="/user/logout"><i class="fa fa-user"></i> 로그아웃</a></button>
+                {% else %}
+                    <button style="font-size:16px"><a href="/user/logout"><i class="fa fa-user"></i> 로그아웃</a></button>
+                {% endif %}
                 </div>
             </div>
         </nav>
