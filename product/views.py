@@ -1,10 +1,15 @@
 import os
+from unicodedata import category
 from django.shortcuts import render
 # views.py
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework import status
+
+from drfShop.permissions import UserSeller
+
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from django.db.models import F
 
@@ -15,7 +20,7 @@ from product.models import Product as ProductModel
 from product.models import ProductOption as ProductOptionModel
 from product.models import Category as CategoryModel
 
-from product.serializers import ProductSerializer
+from product.serializers import CategorySerializer, ProductSerializer
 from userchoice.serializers import CartSerializer
 
 # Create your views here.
@@ -24,11 +29,15 @@ from userchoice.serializers import CartSerializer
 class ProductItemView(APIView):
     
     #모든 상품에 대해서 product 정보 가져오고
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [UserSeller]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'sell_product.html'
     def get(self, request):
-        product = ProductModel.objects.all()
-        serialized_product_data = ProductSerializer(product).data # 오브젝트를 넣어서 직렬화해주기
-        return Response(serialized_product_data, many=True, status=status.HTTP_200_OK)
+        category = CategoryModel.objects.all()
+        category_serializer = CartSerializer(category)
+        if not request.user.is_seller or not request.user.is_admin:
+            return Response(template_name = 'index.html', status=status.HTTP_401_UNAUTHORIZED)
+        return Response(category_serializer.data, template_name = 'sell_product.html', status=status.HTTP_200_OK)
 
         # return data
         """
@@ -75,68 +84,72 @@ class ProductItemView(APIView):
         return Response({"message": f"{ProductModel.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
 #카테고리별로처리
-class ProductCategoryView(APIView):
+# class ProductCategoryView(APIView):
     
-    #카테고리별로 상품에 대해서 product 정보 가져오고
-    permission_classes = [permissions.AllowAny]
-    def get(self, request , obj_id):
-        category = CategoryModel.get(obj_id)
-        serialized_product_data = ProductSerializer(category).data # 오브젝트를 넣어서 직렬화해주기
-        return Response(serialized_product_data, many=True, status=status.HTTP_200_OK)
+#     #카테고리별로 상품에 대해서 product 정보 가져오고
+#     permission_classes = [permissions.AllowAny]
+#     def get(self, request , obj_id):
+#         category = CategoryModel.get(obj_id)
+#         serialized_product_data = ProductSerializer(category).data # 오브젝트를 넣어서 직렬화해주기
+#         return Response(serialized_product_data, many=True, status=status.HTTP_200_OK)
 
-        # return data
-        """
-        {
-            "username": "user",
-            "password": "pbkdf2_sha256$320000$u5YnmKo9luab9csqWpzRsa$pKfqHnBiF5Rgdo1Mj9nxNOdhpAl9AhPVXFPXkbPz7Mg=",
-            "fullname": "user's name",
-            "email": "user@email.com"
-        }
-        """
+#         # return data
+#         """
+#         {
+#             "username": "user",
+#             "password": "pbkdf2_sha256$320000$u5YnmKo9luab9csqWpzRsa$pKfqHnBiF5Rgdo1Mj9nxNOdhpAl9AhPVXFPXkbPz7Mg=",
+#             "fullname": "user's name",
+#             "email": "user@email.com"
+#         }
+#         """
 
-    # 상품 등록
-    def post(self, request):
-        '''
-        상품 정보를 입력받아 create 하는 함수
-        '''
-        product_sale_serializer = ProductSerializer(data=request.data)
-        if product_sale_serializer.is_valid(): 
-            product_sale_serializer.save() # 정상
-            return Response(product_sale_serializer.data, status=status.HTTP_200_OK)
+#     # 상품 등록
+#     def post(self, request):
+#         '''
+#         상품 정보를 입력받아 create 하는 함수
+#         '''
+#         product_sale_serializer = ProductSerializer(data=request.data)
+#         if product_sale_serializer.is_valid(): 
+#             product_sale_serializer.save() # 정상
+#             return Response(product_sale_serializer.data, status=status.HTTP_200_OK)
 
-        return Response(product_sale_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(product_sale_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
-    # 상품 수정
-    def put(self, request, obj_id):
+#     # 상품 수정
+#     def put(self, request, obj_id):
         
-        product_sale_info_change = ProductModel.objects.get(id=obj_id)
-        # 오브젝트, data , partial 넘기기
-        product_sale_update = ProductSerializer(product_sale_info_change, data=request.data, partial=True)
-        product_sale_update.is_valid(raise_exception=True)
-        product_sale_update.save()
-        return Response(product_sale_update.data, status=status.HTTP_200_OK)
+#         product_sale_info_change = ProductModel.objects.get(id=obj_id)
+#         # 오브젝트, data , partial 넘기기
+#         product_sale_update = ProductSerializer(product_sale_info_change, data=request.data, partial=True)
+#         product_sale_update.is_valid(raise_exception=True)
+#         product_sale_update.save()
+#         return Response(product_sale_update.data, status=status.HTTP_200_OK)
         
-    # 삭제
-    def delete(self, request, obj_id):
+#     # 삭제
+#     def delete(self, request, obj_id):
         
-        try:
-            product_delete = ProductModel.objects.get(obj_id)  
-        except ProductModel.DoesNotExist:
-         # some event						   status=400
-            return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        product_delete.delete()
-        # 오브젝트, data , partial 넘기기
-        return Response({"message": f"{ProductModel.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
+#         try:
+#             product_delete = ProductModel.objects.get(obj_id)  
+#         except ProductModel.DoesNotExist:
+#          # some event						   status=400
+#             return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+#         product_delete.delete()
+#         # 오브젝트, data , partial 넘기기
+#         return Response({"message": f"{ProductModel.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
 # 특정 아이템에 대한 처리
-class ProductDetailView(APIView):
+
+class CategoryView(APIView):
     
-    #해당 상품에 대해서 product 정보 가져오고
-    permission_classes = [permissions.AllowAny]
-    def get(self, request, obj_id):
-        product = ProductModel.objects.get(obj_id)
-        serialized_product_data = ProductSerializer(product).data # 오브젝트를 넣어서 직렬화해주기
-        return Response(serialized_product_data, status=status.HTTP_200_OK)
+    #해당 카테고리에 대한 product 정보 가져오고
+    # permission_classes = [UserSeller]
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'sell_product.html'
+
+    def get(self, request, obj_id):    # 카테고리 id
+        category = CategoryModel.objects.get(obj_id)
+        serialized_product_data = ProductSerializer(category).data # 오브젝트를 넣어서 직렬화해주기
+        return Response(serialized_product_data, template_name = 'sell_product.html', status=status.HTTP_200_OK)
 
         # return data
         """
@@ -148,42 +161,42 @@ class ProductDetailView(APIView):
         }
         """
 
-    # 상품 구매 옵션 정보를 받아서 장바구니에 넣어주기
+    # 카테고리 생성
     def post(self, request):
         '''
         상품 정보를 입력받아 create 하는 함수
         '''
-        user_purhase_option = ProductOptionModel.objects.create(**request.data)
-        product_purchase_serializer = ProductSerializer(user_purhase_option, data=request.data)
-        cart_serializer = CartSerializer(id=request.user_id, data=product_purchase_serializer) # 이렇게 프로덕트 정보를 담아줘도 되나...
-        if cart_serializer.is_valid(): 
-            cart_serializer.save() # 정상
-            return Response(cart_serializer.data, status=status.HTTP_200_OK)
-
-        return Response(cart_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        print('1')
+        category_serializer = CategorySerializer(data=request.data)
+        print(category_serializer)
+        if category_serializer.is_valid(): 
+            print('3')
+            category_serializer.save() # 정상
+            print('4')
+            return Response(category_serializer.data, template_name = 'sell_product.html', status=status.HTTP_200_OK)
+        print('5')
+        return Response(category_serializer.errors, template_name = 'sell_product.html', status=status.HTTP_400_BAD_REQUEST)
       
-    # 구매정보 수정
-    def put(self, request, obj_id):
-        
-        product_update = ProductModel.objects.get(id=obj_id)
+    # 카테고리 수정
+    def put(self, request, obj_id):   # 카테고리 id
+        category = CategoryModel.objects.get(obj_id)
         # 오브젝트, data , partial 넘기기
-        product_serializer = ProductSerializer(product_update, data=request.data, partial=True)
-        product_serializer.is_valid(raise_exception=True)
-        product_serializer.save()
-        return Response(product_serializer.data, status=status.HTTP_200_OK)
+        category_serializer = CategorySerializer(category, data=request.data, partial=True)
+        category_serializer.is_valid(raise_exception=True)
+        category_serializer.save()
+        return Response(category_serializer.data, status=status.HTTP_200_OK)
         
     # 삭제
     def delete(self, request, obj_id):
         
         try:
-            product_delete = ProductModel.objects.get(obj_id)  
-        except ProductModel.DoesNotExist:
+            category_delete = CategoryModel.objects.get(obj_id)  
+        except CategoryModel.DoesNotExist:
          # some event						   status=400
             return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        product_delete.delete()
+        category_delete.delete()
         # 오브젝트, data , partial 넘기기
-        return Response({"message": f"{ProductModel.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
-
+        return Response({"message": f"{CategoryModel.name} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
 
 

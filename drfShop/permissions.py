@@ -70,7 +70,7 @@ class UserSeller(BasePermission):
     def has_permission(self, request, view):
         if request.user.is_seller == False:
             response ={
-                    "detail": "판매자가 아닙니다. 구매자로 재로그인 해주십시오.",
+                    "detail": "판매자가 아닙니다. 판매자로 재로그인 해주십시오.",
                 }
             raise GenericAPIException(status_code=status.HTTP_401_UNAUTHORIZED, detail=response)
         return True

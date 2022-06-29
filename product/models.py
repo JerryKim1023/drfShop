@@ -2,7 +2,6 @@ from django.db import models
 
 
 import userchoice
-import seller
 # from userchoice.models import Like as LikeModel
 
 # Create your models here.
@@ -45,9 +44,9 @@ class ProductOption(models.Model):
         db_table = "product_option"
 
     product = models.OneToOneField(to=Product, verbose_name="상품", on_delete=models.CASCADE, primary_key=True)
-    options = models.ForeignKey("seller.Option", verbose_name="옵션", on_delete=models.CASCADE, max_length=50)
+    options = models.CharField("옵션", max_length=50)
     quantity = models.IntegerField("수량")
-    sizes = models.ForeignKey("seller.Size", verbose_name="사이즈", on_delete=models.CASCADE, max_length=10)
+    sizes = models.CharField("사이즈", max_length=10)
     price = models.IntegerField("가격")
 
     def __str__(self):

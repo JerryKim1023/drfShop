@@ -3,6 +3,7 @@ from product.models import Product as ProductModel
 from product.models import ProductOption as ProductOptionModel
 from product.models import Category as CategoryModel
 
+
 from django.utils.safestring import mark_safe
 
 # Register your models here.
@@ -27,15 +28,16 @@ class ProductAdmin(admin.ModelAdmin):
 
     thumbnail_preview.short_decription = "Thumbnail"
 
+
+
 class ProductOptionAdmin(admin.ModelAdmin):
     list_display = (
-        "product", 
-        "options",
+        "product",
+        "options", 
         "quantity",
-        "size",
-        "price"
+        "sizes",
+        "price",
     )
-
 
 admin.site.register(ProductModel, ProductAdmin)
 admin.site.register(ProductOptionModel, ProductOptionAdmin)

@@ -53,21 +53,63 @@
                                 <!-- Grid row -->
                                 <div class="row">
                                     <!-- Grid column -->
-                                    <div class="col-md-6 mb-4">
-                                        <div class="card">
+                                    <div class="col-md-12 mb-4">
+                                        <div class="wrapper">
+                                            <h1>회원가입</h1>
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                아이디: <br>
+                                                <input name="username" type="text">
+                                                <br>
+                                                이메일: <br>
+                                                <input name="email" type="email">
+                                                <br>
+                                                비밀번호: <br>
+                                                <input name="password" type="password">
+                                                <br>
+                                                {% comment %} 비밀번호 확인: <br>
+                                                <input name="password2" type="password">
+                                                <br> {% endcomment %}
+                                                이름: <br>
+                                                <input name="fullname" type="text">
+                                                <br>
+                                                핸드폰번호: <br>
+                                                <input name="phone_number" type="phone_number">
+                                                <br>
+                                                판매자: <br>
+                                                <input name='is_seller' class="inp-cbx" id="is_seller" type="checkbox"/>
+                                                            <label class="cbx" for="is_seller"><span>
+                                                                <svg width="12px" height="10px">
+                                                                <use xlink:href="#check"></use>
+                                                                </svg></span><span></span></label>
+                                                <br><br>
+                                                <input type="submit" class="btn btn-primary" value="Sign Up">
+                                            </form>
+                                        </div>
+                                        <!--/.Main column-->
+
+                                    </div>
+                                </div>
+                                <!--/.Main layout-->
+
+                            </main>
+                            
+                            
+                            
+                            <div class="card">
                                             <div class="card-body">
                                                 <!-- Form register -->
                                                 <form method="post">
-                                                    {% csrf_token %}
+                                                    <div>
                                                     <h2 class="text-center font-up font-bold deep-orange-text py-4">Sign up</h2>
-                                                    <div class="md-form">
-                                                        <i class="fa fa-user prefix grey-text"></i>
-                                                        <input type="text" id="orangeForm-name3" class="form-control">
-                                                            <label for="username">ID</label>
+                                                        <div class="md-form">
+                                                            <i class="fa fa-user prefix grey-text"></i>
+                                                            <input type="text" id="orangeForm-email3" class="form-control">
+                                                                <label for="username">ID</label>
                                                         </div>
                                                         <div class="md-form">
-                                                        <i class="fa fa-envelope prefix grey-text"></i>
-                                                        <input type="text" id="orangeForm-email3" class="form-control">
+                                                            <i class="fa fa-envelope prefix grey-text"></i>
+                                                            <input type="text" id="orangeForm-name3" class="form-control">
                                                             <label for="email">email</label>
                                                         </div>
                                                         <div class="md-form">
@@ -77,15 +119,14 @@
                                                         </div>
                                                         <div class="md-form">
                                                             <i class="fa fa-user prefix grey-text"></i>
-                                                            <input type="text" id="orangeForm-email3" class="form-control">
+                                                            <input type="text" id="orangeForm-name3" class="form-control">
                                                                 <label for="fullname">이름</label>
                                                         </div>
                                                         <div class="md-form">
                                                             <i class="fa fa-user prefix grey-text"></i>
-                                                            <input type="text" id="orangeForm-email3" class="form-control">
+                                                            <input type="text" id="orangeForm-name3" class="form-control">
                                                                 <label for="phone_number">핸드폰번호</label>
                                                             </div>
-
                                                         <div class="md-form">
                                                             <input class="inp-cbx" id="is_seller" type="checkbox"/>
                                                             <label class="cbx" for="is_seller"><span>
@@ -93,11 +134,11 @@
                                                                 <use xlink:href="#check"></use>
                                                                 </svg></span><span>판매자</span></label>
                                                         </div>
-
-                                                            <div class="text-center">
-                                                                <a href="/user/signup"><button type='submit' class="btn btn-deep-orange">next<i class="fa fa-angle-double-right pl-2" aria-hidden="true"></i>
-                                                        </button></a>
                                                     </div>
+                                                        <div class="text-center">
+                                                            <a href="/user/signup"><button type='submit' autocomplete="off" class="btn btn-deep-orange">next<i class="fa fa-angle-double-right pl-2" aria-hidden="true"></i>
+                                                            </button></a>
+                                                        </div>
                                                 </form>
                                                             <!-- Form register -->
                                                         </div>
@@ -107,10 +148,3 @@
                                             </div>
                                             <!-- Grid row -->
                                         </div>
-                                        <!--/.Main column-->
-
-                                    </div>
-                                </div>
-                                <!--/.Main layout-->
-
-                            </main>

@@ -69,7 +69,7 @@
 
 
 
-.card {
+.user_card {
     border: 0;
     padding: 0 40px;
 }
@@ -183,3 +183,8 @@
     }
   }
   
+/* label hide words problem solution */
+label {
+    margin-left: 3rem !important;
+    top: -1.2rem !important;
+}

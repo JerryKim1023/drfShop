@@ -29,19 +29,19 @@ class LikeSerializer(serializers.ModelSerializer):
 
     class Meta:
         # serializer에 사용될 model, field지정
-        model = ReviewModel
+        model = LikeModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "content", "created", "rating", ]
+        fields = ["user", "product_like", ]
 
 
 class CartSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    # user = serializers.SerializerMethodField()
 
-    def get_user(self, obj):
-        return obj.user.fullname
+    # def get_user(self, obj):
+    #     return obj.user.fullname
 
     class Meta:
         # serializer에 사용될 model, field지정
-        model = ReviewModel
+        model = CartModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "content", "created", "rating", ]
+        fields = ["user", "product", "pay_check", "delivery_state", ]

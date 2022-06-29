@@ -50,34 +50,88 @@
         <div class="col-lg-8">
             <div class="login_box">
                 <div class="container" style="max-width: 600px;">
-                    <img src="https://image.freepik.com/free-vector/large-bookcase-with-books-library-book-shelf-interior_92863-357.jpg"
-                         class="img-fluid" alt="Responsive image">
-                    <div class="info">
-                        <h1>읽은 책에 대해 말씀해주세요.</h1>
-                        <p>다른 사람을 위해 리뷰를 남겨주세요! 다 같이 좋은 책을 읽는다면 다 함께 행복해질 수 있지 않을까요?</p>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">제목</span>
+
+                        <h1>올리고자 하는 상품에 대한 정보를 입력해주세요!</h1>
+                        <p>상품 업데이트</p>
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <div class="image_container">
+                              <div class="row">
+                                <div class="col-md-12">
+                                  <div class="form-group">
+                                    <label class="control-label">Upload File</label>
+                                    <div class="preview-zone hidden">
+                                      <div class="box box-solid">
+                                        <div class="box-header with-border">
+                                          <div><b>Preview</b></div>
+                                          <div class="box-tools pull-right">
+                                            <button type="button" class="btn btn-danger btn-xs remove-preview">
+                                              <i class="fa fa-times"></i> Reset This Form
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div class="box-body"></div>
+                                      </div>
+                                    </div>
+                                    <div class="dropzone-wrapper">
+                                      <div class="dropzone-desc">
+                                        <i class="glyphicon glyphicon-download-alt"></i>
+                                        <p>Choose an image file or drag it here.</p>
+                                      </div>
+                                      <input type="file" name="thumbnail" class="dropzone">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">상품이름</span>
+                                    </div>
+                                    <input name='title' type="text" class="form-control" id="title">
+                                </div>
+                                <div class="text"> Category INPUT-SELECT</div>
+                                        <div class="t-dropdown-block">
+                                        <div class="t-dropdown-select">
+                                            <input type="text"  class="t-dropdown-input" placeholder="Value" />
+                                            <span class="t-select-btn">
+                                        </span>
+                                        </div>
+                                        <ul id="t-dropdown-width" class="t-dropdown-list">
+                                            <li class="t-dropdown-item">Item 1</li>
+                                            <li class="t-dropdown-item">Item 2</li>
+                                            <li class="t-dropdown-item">Item 3</li>
+                                            <li class="t-dropdown-item"><button onclick="openClose()" id="btn-post-box" type="button" class="btn btn-primary">카테고리 만들기</button></li>
+                                        </ul>
+                                        <div id="post-box" class="form-post" style="">
+                                            <div>
+                                                <div class="form-group">
+                                                    <label for="name">카테고리 이름</label>
+                                                    <input name='name' id="post-url" class="form-control" placeholder="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description">설명</label>
+                                                    <textarea name='description' id="post-comment" class="form-control" rows="2"></textarea>
+                                                </div>
+                                                <button type="button" class="btn btn-primary" onclick="/product/category">카테고리 저장</button>
+                                                <button type="button" class="btn btn-primary" onclick="openClose()">닫기</button>
+                                            </div>
+                                        </div>
+                                        </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">상품 설명</span>
+                                    </div>
+                                    <textarea name='desc' class="form-control" id="bookReview"
+                                              cols="30"
+                                              rows="5" placeholder="140자까지 입력할 수 있습니다."></textarea>
+                                </div>
+                              </div>
+                        
+                              <div class="row">
+                                <div class="col-md-12">
+                                    <button onclick="/product/purchase" type="submit" class="btn btn-primary">상품 등록하기</button>
+                                </div>
+                              </div>
                             </div>
-                            <input type="text" class="form-control" id="title">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">저자</span>
-                            </div>
-                            <input type="text" class="form-control" id="author">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">리뷰</span>
-                            </div>
-                            <textarea class="form-control" id="bookReview"
-                                      cols="30"
-                                      rows="5" placeholder="140자까지 입력할 수 있습니다."></textarea>
-                        </div>
-                        <div class="review">
-                            <button onclick="makeReview()" type="button" class="btn btn-primary">리뷰 작성하기</button>
-                        </div>
+                          </form>
                     </div>
             </div>
         </div>

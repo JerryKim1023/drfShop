@@ -27,7 +27,7 @@ class Like(models.Model):
     # like_date(mtm 활용 가능)??
 
     def __str__(self):
-        return f"{self.product}은 {self.user}님이 좋아요한 상품입니다"
+        return f"{self.product_like.title}은 {self.user}님이 좋아요한 상품입니다"
 
 
 class Cart(models.Model):
