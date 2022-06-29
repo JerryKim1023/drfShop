@@ -158,7 +158,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         "introduction": "자기소개입니다.",
         "birthday": "2000-1-01",
         "age": 13,
-        "get_hobbys": [3,4,5,6],
+        "get_interests": [3,4,5,6],
     },
 }
 '''
