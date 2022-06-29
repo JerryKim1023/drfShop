@@ -6,6 +6,9 @@ from product.models import Category as CategoryModel
 
 from django.utils.safestring import mark_safe
 
+class ProductOptionInline(admin.StackedInline): # 세로로 뿌려줌
+    model = ProductOptionModel
+
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
@@ -28,7 +31,9 @@ class ProductAdmin(admin.ModelAdmin):
 
     thumbnail_preview.short_decription = "Thumbnail"
 
-
+    inlines = (
+            ProductOptionInline,
+        )
 
 class ProductOptionAdmin(admin.ModelAdmin):
     list_display = (
@@ -40,5 +45,5 @@ class ProductOptionAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(ProductModel, ProductAdmin)
-admin.site.register(ProductOptionModel, ProductOptionAdmin)
+# admin.site.register(ProductOptionModel, ProductOptionAdmin)
 admin.site.register(CategoryModel)
