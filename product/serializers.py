@@ -19,8 +19,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = CategoryModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
         fields = "__all__"
+
 class ProductOptionSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
 
     def get_product(self, obj):
         return obj.product.title
@@ -29,11 +29,20 @@ class ProductOptionSerializer(serializers.ModelSerializer):
         # serializer에 사용될 model, field지정
         model = ProductOptionModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["product", "options", "quantity", "sizes", "price", ]
+        fields = ["options", "quantity", "sizes", "price", ]
 
 class ProductSerializer(serializers.ModelSerializer):
-    product_option = serializers.SerializerMethodField()
+    category = serializers.SlugRelatedField(queryset=CategoryModel.objects.all(), slug_field='id')
+    product_option = ProductOptionSerializer(required=False)
     review = serializers.SerializerMethodField()
+
+    class Meta:
+        # serializer에 사용될 model, field지정
+        model = ProductModel
+        # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
+        fields = ["user", "category", "title", "thumbnail", "desc", "created", 
+                  "modified", "show_expired_date", "stock", "is_active", "product_option", "review"] 
+
     def get_review(self, obj):
         reviews = obj.review_set
         return {
@@ -50,16 +59,14 @@ class ProductSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        product_option = validated_data.pop('product_option')
+        print(validated_data)
 
         product = ProductModel(**validated_data)
         product.user = self.context['request'].user
         product.save()
         product.desc += f"\n\n{product.created.replace(microsecond=0, tzinfo=None)}에 등록된 상품입니다."
         product.save()
-
-        product_option = ProductOptionModel.objects.create(product=product, **product_option) # 해당 상품의 상품 옵션 object 생성
-
+    
         return product
 
     def update(self, instance, validated_data): # 기본 업데이트 함수 구현해서 위로 커스텀
@@ -77,15 +84,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
-    class Meta:
-        # serializer에 사용될 model, field지정
-        model = ProductModel
-        # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "category", "title", "thumbnail", "desc", "created", 
-                  "modified", "show_expired_date", "stock", "is_active", "product_option", "review"]
-
-
 
 
 class LikeCountSerializer(serializers.ModelSerializer):
