@@ -21,7 +21,7 @@ class Product(models.Model):
         db_table = "product"
     # <제목, 썸네일, 설명, 등록일자, 노출 시작 일, 노출 종료일, 활성화 여부>
     user = models.ForeignKey("user.User", verbose_name="작성자", on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(to=Category, on_delete=models.CASCADE)
     title = models.CharField("상품명", max_length=40)
     thumbnail = models.ImageField("썸네일", upload_to="product/thumbnail",  height_field=None, width_field=None, max_length=None)
     desc = models.TextField("설명", blank=True)
