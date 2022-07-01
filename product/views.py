@@ -39,7 +39,8 @@ class ProductItemView(APIView):
         category = CategoryModel.objects.all().order_by('?').first() # 임시로 카테고리 랜덤으로 하나 뽑아오게함.
         
         product_serializer = ProductSerializer(product, many=True)
-
+        print(product_serializer)
+        print(type(product_serializer))
         # if not True :
         #     return Response(status=status.HTTP_401_UNAUTHORIZED) # template_name = 'index.html', 
         return Response(product_serializer.data, status=status.HTTP_200_OK) #  template_name = 'sell_product.html',
@@ -79,15 +80,18 @@ class ProductItemView(APIView):
         
     # 삭제
     def delete(self, request, obj_id):
-        
+        print('1')
         try:
-            product_delete = ProductModel.objects.get(obj_id)  
+            product_delete = ProductModel.objects.get(id=obj_id)
+            print('2')
         except ProductModel.DoesNotExist:
          # some event						   status=400
             return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
+        print('3')
         product_delete.delete()
+        print('4')
         # 오브젝트, data , partial 넘기기
-        return Response({"message": f"{ProductModel.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
+        return Response({"message": f"{ProductModel.user.username} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
 
 
 
@@ -98,11 +102,18 @@ class CategoryView(APIView):
     # renderer_classes = [TemplateHTMLRenderer]
     # template_name = 'sell_product.html'
 
-    def get(self, request, obj_id):    # 카테고리 id
-        category = CategoryModel.objects.get(obj_id)
-        serialized_product_data = ProductSerializer(category).data # 오브젝트를 넣어서 직렬화해주기
-        return Response(serialized_product_data, status=status.HTTP_200_OK) # , template_name = 'sell_product.html'
 
+    def get(self, request, obj_id):    # 카테고리 id
+        print('1')
+        category_product = ProductModel.objects.filter(category_id=obj_id)
+        print(category_product)
+        # category = CategoryModel.objects.all().order_by('?').first() # 임시로 카테고리 랜덤으로 하나 뽑아오게함.
+        print('3')
+        serialized_product_data = ProductSerializer(category_product, many=True).data # 오브젝트를 넣어서 직렬화해주기
+        print(serialized_product_data)
+        print(type(serialized_product_data))
+        return Response(serialized_product_data, status=status.HTTP_200_OK) # , template_name = 'sell_product.html'
+        
         # return data
         """
         {
@@ -122,18 +133,20 @@ class CategoryView(APIView):
         category_serializer = CategorySerializer(data=request.data)
         print(category_serializer)
         if category_serializer.is_valid(): 
-            print('3')
+            print(category_serializer)
             category_serializer.save() # 정상
-            print('4')
-            return Response(category_serializer.data, template_name = 'sell_product.html', status=status.HTTP_200_OK)
+            print(category_serializer.data)
+            return Response(category_serializer.data, status=status.HTTP_200_OK)
         print('5')
-        return Response(category_serializer.errors, template_name = 'sell_product.html', status=status.HTTP_400_BAD_REQUEST)
+        return Response(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
       
     # 카테고리 수정
     def put(self, request, obj_id):   # 카테고리 id
-        category = CategoryModel.objects.get(obj_id)
+        category = CategoryModel.objects.get(id=obj_id)
+        print(category)
         # 오브젝트, data , partial 넘기기
         category_serializer = CategorySerializer(category, data=request.data, partial=True)
+        print(category_serializer)
         category_serializer.is_valid(raise_exception=True)
         category_serializer.save()
         return Response(category_serializer.data, status=status.HTTP_200_OK)
@@ -142,7 +155,7 @@ class CategoryView(APIView):
     def delete(self, request, obj_id):
         
         try:
-            category_delete = CategoryModel.objects.get(obj_id)  
+            category_delete = CategoryModel.objects.get(id=obj_id)  
         except CategoryModel.DoesNotExist:
          # some event						   status=400
             return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)

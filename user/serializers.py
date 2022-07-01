@@ -11,7 +11,7 @@ class InterestSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     interests = InterestSerializer(many=True, required=False, read_only=True)
-    get_intersts = serializers.ListField(required=False) # 리스트 필드로 지정해서 리스트 포맷으로 받을 수 있게 됨.
+    get_intersts = serializers.ListField(required=False, write_only=True) # 리스트 필드로 지정해서 리스트 포맷으로 받을 수 있게 됨.
     class Meta:
         model = UserProfileModel
         fields = ["introduction", "birthday", "age", "interests", "get_intersts"]
@@ -79,7 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
         user_profile = UserProfileModel.objects.create(user=user, **user_profile)
         
         # interest 등록
-        user_profile.interests.add(*get_interests) # M2M 관계여서 .add 가 가능
+        user_profile.interests.add(*get_interests) # M2M 관계여서 .add 가 가능 # .add* (3,4,5,6) / .add ([3,4,5,6,])
     
         user_profile.save()
 

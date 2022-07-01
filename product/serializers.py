@@ -41,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = ProductModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
         fields = ["user", "category", "title", "thumbnail", "desc", "created", 
-                  "modified", "show_expired_date", "stock", "is_active", "product_option", "review"] 
+                  "modified", "show_expired_date", "stock", "is_active", "product_option", "review"]
 
     def get_review(self, obj):
         reviews = obj.review_set
@@ -62,9 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
         print(validated_data)
 
         product = ProductModel(**validated_data)
-        product.user = self.context['request'].user
-        product.save()
-        product.desc += f"\n\n{product.created.replace(microsecond=0, tzinfo=None)}에 등록된 상품입니다."
+        # product.desc += f"\n\n{product.created.replace(microsecond=0, tzinfo=None)}에 등록된 상품입니다."
         product.save()
     
         return product

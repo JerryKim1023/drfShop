@@ -10,16 +10,17 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    # user = serializers.SerializerMethodField()
 
-    def get_user(self, obj):
-        return obj.user.fullname
+    # def get_user(self, obj):
+        
+    #     return obj.user.fullname
 
     class Meta:
         # serializer에 사용될 model, field지정
         model = ReviewModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "content", "created", "rating", ]
+        fields = ["user", "product", "content", "created", "rating", ]
 
 class LikeSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()

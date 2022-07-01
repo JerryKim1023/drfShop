@@ -6,7 +6,7 @@ from .models import Cart as CartModel
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('product', 'rating', 'content')
+    list_display = ('id', 'product', 'rating', 'content')
 # Register your models here.
 admin.site.register(LikeModel)
 admin.site.register(ReviewModel, ReviewAdmin)
