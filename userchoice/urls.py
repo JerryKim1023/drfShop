@@ -7,7 +7,7 @@ urlpatterns = [
 	path('review/', views.ReviewView.as_view(), name="review"), # review
 	path('review/<obj_id>/', views.ReviewView.as_view(), name="review"), # review
 	path('like/<obj_id>/', views.LikeView.as_view(), name="like"), # like
-	# path('login/', views.UserLoginView.as_view(), name="user_api_view"), # login 등 user의 기본적인 api담당
-	# path('seller/<obj_id>/', views.UserSellerApiView.as_view(), name="user_api_view"), # signup, login 등 user의 기본적인 api담당
+	path('order-list/', views.OrderListView.as_view(), name="order_list_view"), # order_list
+	path('order-list/<obj_id>/', views.OrderListView.as_view(), name="order_list_view"), # order_list
 
 ]
