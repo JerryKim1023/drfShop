@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'product',
     'userchoice',
 
+    'corsheaders', # CORS 에러때문에 추가 1
+
 ]
 
 REST_FRAMEWORK = {
@@ -70,6 +72,8 @@ REST_FRAMEWORK = {
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # CORS 에러때문에 추가 2
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,6 +82,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:5000"]
 
 ROOT_URLCONF = 'drfShop.urls'
 
