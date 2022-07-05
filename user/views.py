@@ -28,8 +28,6 @@ class UserSignupView(APIView):
     #모든 사용자에 대해서 user 정보와 userpofile 정보를 가져오고
     # 같은 취미를 가진 사람들을 출력하기
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'signup.html'
     def get(self, request):
         # user = request.user
         user = UserModel.objects.all().order_by('?').first()
@@ -62,9 +60,9 @@ class UserSignupView(APIView):
             user_serializer.save() # 정상
             print('3')
             print(user_serializer.data)
-            return Response(user_serializer.data, template_name='login.html', status=status.HTTP_200_OK)
+            return Response(user_serializer.data, status=status.HTTP_200_OK)
         print('4')
-        return Response(user_serializer.errors, template_name='signup.html', status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         
         # is_valid 함수에서 raise_exeption=True를 주면 아래처럼 코드 간소화 가능
@@ -105,31 +103,22 @@ class UserSignupView(APIView):
 
 class UserLoginView(APIView):
     permission_classes = [permissions.AllowAny]
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'login.html'
+
     # 로그인
-    def get(self, request):
-        print('loginget')
-        if not request.user.is_authenticated:
-            return Response(template_name = 'login.html', status=status.HTTP_401_UNAUTHORIZED)
-
-        return Response(template_name = 'index.html', status=status.HTTP_200_OK)
-
-
     def post(self, request):
-        print('loginpost')
+        print(request.data)
         username = request.data.get('username', '')
         password = request.data.get('password', '')
         print('3333311')
         user = auth.authenticate(request, username=username, password=password)
-        print('44444411')
+        print(user)
         if user is not None:
             print('11111')
             auth.login(request, user)
             print('222222222')
-            return Response({"message": "로그인 성공!!"}, template_name = 'index.html', status=status.HTTP_200_OK)
+            return Response({"result": "success"}, status=status.HTTP_200_OK)
 
-        return Response({"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."}, template_name = 'login.html', status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "존재하지 않는 계정이거나 패스워드가 일치하지 않습니다."}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class UserLogoutView(APIView):
