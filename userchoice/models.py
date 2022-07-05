@@ -39,6 +39,7 @@ class Cart(models.Model):
     user = models.ForeignKey("user.User", verbose_name="고객", on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(ProductModel, verbose_name="상품", on_delete=models.SET_NULL, null=True)
     product_option = models.ForeignKey(ProductOptionModel, verbose_name="상품옵션", on_delete=models.SET_NULL, null=True)
+    is_paid = models.BooleanField("지불여부", default=False)
 
     def __str__(self):
         return f"{self.product}이 담겨져 있습니다."
@@ -57,7 +58,7 @@ class OrderList(models.Model):
     user = models.ForeignKey("user.User", verbose_name="고객", on_delete=models.SET_NULL, null=True)
     cart = models.ManyToManyField(to="Cart", verbose_name="장바구니")
     the_time_payed = models.DateTimeField("구매완료 시간", auto_now_add=True)
-    complete = models.BooleanField("주문완료", default=True)
+    # complete = models.BooleanField("주문완료", default=True)
     pay_check = models.CharField(verbose_name='결제방식', max_length=4, choices=PayCheck, default='')
 
     delivery_state = models.CharField(u'배송상태', max_length=50, default='배송준비 중', choices=DELIVERY_STATE)

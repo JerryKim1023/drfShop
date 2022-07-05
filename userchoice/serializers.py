@@ -24,10 +24,10 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ["user", "product", "content", "created", "rating", ]
 
 class LikeSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+    # user = serializers.SerializerMethodField()
 
-    def get_user(self, obj):
-        return obj.user.fullname
+    # def get_user(self, obj):
+    #     return obj.user.fullname
 
     class Meta:
         # serializer에 사용될 model, field지정
@@ -46,34 +46,29 @@ class CartSerializer(serializers.ModelSerializer):
         # serializer에 사용될 model, field지정
         model = CartModel
         # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "product", "product_option",]
+        fields = ["user", "product", "product_option", "is_paid",]
 
 
 class OrderListSerializer(serializers.ModelSerializer):
     cart = CartSerializer(many=True, required=False)
-    get_carts = serializers.ListField(required=False) # 리스트 필드로 지정해서 리스트 포맷으로 받을 수 있게 됨.
+    get_carts = serializers.ListField(required=False)
+
     class Meta:
-        # serializer에 사용될 model, field지정
         model = OrderListModel
-        # 모든 필드를 사용하고 싶을 경우 fields = "__all__"로 사용
-        fields = ["user", "the_time_payed", "complete", "pay_check", "delivery_state", "cart", "get_carts",]
+        fields = ["user", "the_time_payed", "pay_check", "delivery_state", "cart", "get_carts",]
 
     def create(self, validated_data):
-        print(validated_data)
         get_carts = validated_data.pop("get_carts", []) # 앞의 값 가져와서 없으면 [] 로 넘겨줌.
-        print(get_carts)
         order_list = OrderListModel(**validated_data)
-        print(order_list)
         order_list.save()
-
-        # cart 등록
-        order_list.cart.add(*get_carts) # M2M 관계여서 .add 가 가능
-        order_list.save()
-
-        # cart 내역은 삭제
         for i in get_carts:
-            purchased_cart = OrderListModel.objects.filter(cart_id=i)
-            purchased_cart.delete()
+            cart = CartModel.objects.get(id=i)
+            cart.is_paid = True
+            cart.save()
+        # order_list.cart.is_paid = True
+        
+        order_list.cart.add(*get_carts)
+        order_list.save()
 
         return order_list
 

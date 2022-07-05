@@ -105,23 +105,29 @@ class OrderListView(APIView):
         # print(order_list)
         print('0')
         order_list_serializer = OrderListSerializer(data=request.data)
+        
         print('1')
         if order_list_serializer.is_valid():
             print('2')
             order_list_serializer.save() # 정상
             print('3')
             print(order_list_serializer.data)
+            print(request.data)
+            cart_lists = request.data.get('get_carts')
+            for i in cart_lists:
+                cart = CartModel.objects.filter(is_paid=True)
+                cart.delete()
             return Response(order_list_serializer.data, status=status.HTTP_200_OK)
         print('4')
         return Response(order_list_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-    # 구매내역 수정(고객정보, 배송지정보 등등)
+    # 구매내역 수정(고객정보, 배송지정보, 배송상태 등등)
     def put(self, request, obj_id):
         
         # user_update = UserModel.objects.get(id=obj_id)
-        order_list_update = CartModel.objects.get(id=obj_id)
+        order_list_update = OrderListModel.objects.get(id=obj_id)
         # 오브젝트, data , partial 넘기기
-        order_list_serializer = CartSerializer(order_list_update, data=request.data, partial=True)
+        order_list_serializer = OrderListSerializer(order_list_update, data=request.data, partial=True)
         order_list_serializer.is_valid(raise_exception=True)
         order_list_serializer.save() # 정상
         return Response(order_list_serializer.data, status=status.HTTP_200_OK)
@@ -148,6 +154,8 @@ class ReviewView(APIView):
     permission_classes = [permissions.AllowAny]
     def get(self, request, obj_id):  # 상품 id 받아옴
         # product = ProductModel.objects.get(id=obj_id)
+        # data = request.data.dict()
+        # data['product'] = obj_id
         reviews = ReviewModel.objects.filter(product_id=obj_id)
         # product = ProductModel.objects.all().order_by('?').first()
         print(reviews)
@@ -155,16 +163,6 @@ class ReviewView(APIView):
         print(serialized_review_data)
         print(type(serialized_review_data))
         return Response(serialized_review_data, status=status.HTTP_200_OK)
-
-        # return data
-        """
-        {
-            "username": "user",
-            "password": "pbkdf2_sha256$320000$u5YnmKo9luab9csqWpzRsa$pKfqHnBiF5Rgdo1Mj9nxNOdhpAl9AhPVXFPXkbPz7Mg=",
-            "fullname": "user's name",
-            "email": "user@email.com"
-        }
-        """
 
     # 상품 리뷰 등록
     def post(self, request): # 상품 id 받아옴
@@ -218,6 +216,6 @@ class LikeView(APIView):
             if product.like.filter(request.user_id).exists():
                 product.like.remove(request.user)
             else:
-                product.like_users.add(request.user)
+                product.product_like.add(request.user)
             return Response({"message": f"{ReviewModel.product.title}에 좋아요 하셨습니다."}, status=status.HTTP_200_OK)
         return Response({"message": "로그인 한 유저만 좋아요가 가능합니다."}, status=status.HTTP_400_BAD_REQUEST)
