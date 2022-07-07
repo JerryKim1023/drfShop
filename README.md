@@ -27,7 +27,7 @@ try serializer, CBV implement
 - 데이터는 시리얼라이저로 정제한 값을 리턴해서 json으로 반환
 ![image](https://user-images.githubusercontent.com/74017167/177698075-c35d21c7-a4e3-4860-bd06-2990c88cd1bc.png)
 
-## 💥 [ 기억해두면 좋겠다고 생각했던 에러 모음집 ](https://github.com/JerryKim1023/drfShop/wiki/%EC%97%90%EB%9F%AC%EB%AA%A8%EC%9D%8C%EC%A7%91)
+## 💥 [ 기억해두면 좋겠다고 생각했던 에러 모음집 ](https://github.com/JerryKim1023/drfShop/wiki/%EC%97%90%EB%9F%AC%EB%AA%A8%EC%9D%8C%EC%A7%91) <- click!
 
 ## 🎈 KPT
 ### Keep 
