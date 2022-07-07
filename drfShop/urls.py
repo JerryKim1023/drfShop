@@ -19,6 +19,8 @@ from django.urls import include, path
 
 from drfShop import views
 
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
 app_name = 'drfShop'
 
 urlpatterns = [
@@ -27,4 +29,8 @@ urlpatterns = [
     path('user/', include("user.urls"), name='user_view'),
     path('userchoice/', include("userchoice.urls"), name='userchoice_view'),
     path('product/', include("product.urls"), name='product_view'),
+
+    path('login/', TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path('jwt-token-auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('jwt-token-auth/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

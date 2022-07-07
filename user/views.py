@@ -15,6 +15,8 @@ from user.models import User as UserModel
 # from user.models import UserSeller as UserSellerModel
 
 
+from rest_framework.authtoken.models import Token
+
 from django.contrib.auth import authenticate, login
 from django.db.models import F
 
@@ -22,6 +24,7 @@ from datetime import datetime, timedelta, timezone
 
 from user.serializers import UserSignupSerializer, UserSerializer
 # from user.serializers import UserSellerSerializer
+
 
 class UserSignupView(APIView):
     
@@ -46,20 +49,19 @@ class UserSignupView(APIView):
             "email": "user@email.com"
         }
         """
-
     # 회원가입
     def post(self, request):
         '''
         사용자 정보를 입력받아 create 하는 함수
         '''
-        user_serializer = UserSignupSerializer(data=request.data)
+        user_serializer = UserSerializer(data=request.data)
         print('1')
-        print(user_serializer)
         if user_serializer.is_valid(): 
             print('2')
             user_serializer.save() # 정상
             print('3')
-            print(user_serializer.data)
+            print(user_serializer.validated_data)
+
             return Response(user_serializer.data, status=status.HTTP_200_OK)
         print('4')
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -11,15 +11,15 @@ class InterestSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     interests = InterestSerializer(many=True, required=False, read_only=True)
-    get_intersts = serializers.ListField(required=False, write_only=True) # 리스트 필드로 지정해서 리스트 포맷으로 받을 수 있게 됨.
+    get_interests = serializers.ListField(required=False) # 리스트 필드로 지정해서 리스트 포맷으로 받을 수 있게 됨.
     class Meta:
         model = UserProfileModel
-        fields = ["introduction", "birthday", "age", "interests", "get_intersts"]
+        fields = ["introduction", "birthday", "age", "interests", "get_interests"]
         # fields = "__all__"
 
 
 class UserSerializer(serializers.ModelSerializer):
-    userprofile = UserProfileSerializer(required=False)
+    userprofile = UserProfileSerializer()
 
     class Meta:
         # serializer에 사용될 model, field지정
@@ -66,15 +66,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # object를 생성할때 다른 데이터가 입력되는 것을 방지하기 위해 미리 pop 해준다.
-
+        print(validated_data)
         user_profile = validated_data.pop('userprofile')
         get_interests = user_profile.pop("get_interests", []) # 앞의 값 가져와서 없으면 [] 로 넘겨줌.
-
+        
         # User object 생성
         user = UserModel(**validated_data)
         user.set_password(user.password)
         user.save()
-
+        
         # UserProfile object 생성
         user_profile = UserProfileModel.objects.create(user=user, **user_profile)
         
