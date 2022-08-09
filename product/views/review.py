@@ -6,14 +6,14 @@ from rest_framework.views import APIView
 from product.models import Product as ProductModel
 from product.models import Review as ReviewModel
 from product.serializers import ReviewSerializer
-# from utils.permissions import IsCustomer
+from utils.permissions import IsCustomer
 
-#상품별로처리
-class ReviewView(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
-    
-    #상품별로 상품에 대해서 review 정보 가져오고
+
+
+class ReviewByProduct(APIView):
     permission_classes = [permissions.AllowAny]
+    #상품별로 상품에 대해서 review 정보 가져오고
+
     def get(self, request, obj_id):  # 상품 id 받아옴
         # product = ProductModel.objects.get(id=obj_id)
         # data = request.data.dict()
@@ -26,6 +26,9 @@ class ReviewView(APIView):
         print(type(serialized_review_data))
         return Response(serialized_review_data, status=status.HTTP_200_OK)
 
+class ReviewWrite(APIView):
+    permission_classes = [IsCustomer]
+    
     # 상품 리뷰 등록
     def post(self, request): # 상품 id 받아옴
         '''
@@ -39,7 +42,11 @@ class ReviewView(APIView):
             return Response(review_serializer.data, status=status.HTTP_200_OK)
 
         return Response(review_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-      
+
+
+class ReviewChangeDelete(APIView):
+    permission_classes = [IsCustomer]
+    
     # 상품 리뷰 수정
     def put(self, request, obj_id): # 댓글 id 받아옴
         

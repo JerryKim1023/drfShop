@@ -1,82 +1,59 @@
+from datetime import datetime
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import get_object_or_404
-# from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from product.models import Product as ProductModel
 from product.models import Category as CategoryModel
-from product.serializers import CategorySerializer, ProductSerializer
-# from utils.permissions import IsAdminOrReadOnly
+from product.serializers import CategorySerializer
+from utils.permissions import IsAdminOrReadOnly
 
+class CategoryListCreateAPI(APIView):
+    permission_classes = [IsAdminOrReadOnly]
+    authentication_classes = [JWTAuthentication]
 
-class CategoryView(APIView):
-    
-    #해당 카테고리에 대한 product 정보 가져오고
-    # permission_classes = [UserSeller]
-    # renderer_classes = [TemplateHTMLRenderer]
-    # template_name = 'sell_product.html'
+    def get(self, request):
+        categories = CategoryModel.objects.filter(is_active=True)
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-    def get(self, request, obj_id):    # 카테고리 id
-        print('1')
-        category_product = ProductModel.objects.filter(category_id=obj_id)
-        print(category_product)
-        # category = CategoryModel.objects.all().order_by('?').first() # 임시로 카테고리 랜덤으로 하나 뽑아오게함.
-        print('3')
-        serialized_product_data = ProductSerializer(category_product, many=True).data # 오브젝트를 넣어서 직렬화해주기
-        print(serialized_product_data)
-        print(type(serialized_product_data))
-        return Response(serialized_product_data, status=status.HTTP_200_OK) # , template_name = 'sell_product.html'
-        
-        # return data
-        """
-        {
-            "username": "user",
-            "password": "pbkdf2_sha256$320000$u5YnmKo9luab9csqWpzRsa$pKfqHnBiF5Rgdo1Mj9nxNOdhpAl9AhPVXFPXkbPz7Mg=",
-            "fullname": "user's name",
-            "email": "user@email.com"
-        }
-        """
-
-    # 카테고리 생성
     def post(self, request):
-        '''
-        상품 정보를 입력받아 create 하는 함수
-        '''
-        print('1')
-        category_serializer = CategorySerializer(data=request.data)
-        print(category_serializer)
-        if category_serializer.is_valid(): 
-            print(category_serializer)
-            category_serializer.save() # 정상
-            print(category_serializer.data)
-            return Response(category_serializer.data, status=status.HTTP_200_OK)
-        print('5')
-        return Response(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-      
-    # 카테고리 수정
-    def put(self, request, obj_id):   # 카테고리 id
-        category = CategoryModel.objects.get(id=obj_id)
-        print(category)
-        # 오브젝트, data , partial 넘기기
-        category_serializer = CategorySerializer(category, data=request.data, partial=True)
-        print(category_serializer)
-        category_serializer.is_valid(raise_exception=True)
-        category_serializer.save()
-        return Response(category_serializer.data, status=status.HTTP_200_OK)
-        
-    # 삭제
-    def delete(self, request, obj_id):
-        
-        try:
-            category_delete = CategoryModel.objects.get(id=obj_id)  
-        except CategoryModel.DoesNotExist:
-         # some event						   status=400
-            return Response({"message": "오브젝트가 존재하지 않습니다."}, status=status.HTTP_400_BAD_REQUEST)
-        category_delete.delete()
-        # 오브젝트, data , partial 넘기기
-        return Response({"message": f"{CategoryModel.name} 정보가 더 이상 존재하지 않습니다."}, status=status.HTTP_200_OK)
+        serializer = CategorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryDetailAPI(APIView):
+    permission_classes = [IsAdminOrReadOnly]
+    authentication_classes = [JWTAuthentication]
+
+    def _get_object(self, id):
+        category = get_object_or_404(CategoryModel, id=id)
+        return category
+
+    def get(self, request, id):
+        category = self._get_object(id)
+        serializer = CategorySerializer(category)
+        return Response(serializer.data)
+
+    def put(self, request, id):
+        category = self._get_object(id)
+        serializer = CategorySerializer(category, data=request.data, partial=True)  # 부분수정 가능
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        category = self._get_object(id)
+        category.is_active = False
+        category.deleted_at = datetime.now()
+        category.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 
