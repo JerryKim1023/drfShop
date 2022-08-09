@@ -8,4 +8,9 @@ urlpatterns = [
 	# path('seller/<obj_id>/', views.UserSellerApiView.as_view(), name="user_api_view"), # signup, login 등 user의 기본적인 api담당
 	path('logout/', views.UserLogoutView.as_view(), name="user_logout_view"), # logout 등 user의 기본적인 api담당
 
+
+	# JWT
+        # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]

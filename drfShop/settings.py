@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'product',
-    'userchoice',
 
     'corsheaders', # CORS 에러때문에 추가 1
 
