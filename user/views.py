@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.db.models import F
 from rest_framework.exceptions import APIException
 
-from drfShop import permissions
+from rest_framework import permissions
 
 # 회원가입 API
 from rest_framework_simplejwt.tokens import RefreshToken

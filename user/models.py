@@ -24,7 +24,7 @@ class UserManager(BaseUserManager): # 커스텀 User를 쓰려면 무조건 정�
         )
         user.is_superuser = True
         user.is_admin = True
-        user.is_staff = True
+        user.is_seller = True
 
         user.save(using=self._db)
         return user

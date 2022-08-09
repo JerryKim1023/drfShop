@@ -9,7 +9,7 @@ from product.models import Product as ProductModel
 from product.models import Review as ReviewModel
 
 
-class LikeView(APIView):
+class LikeAPI(APIView):
     # permission_classes = [IsAdminOrReadOnly]
     authentication_classes = [JWTAuthentication]
 
