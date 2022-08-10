@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 
 from django.db.models import F, Q, Avg, Max
 
@@ -156,7 +157,7 @@ class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderListModel
         fields = ["user", "the_time_payed", "pay_check", "delivery_state", "cart", "get_carts",]
-
+    @transaction.atomic # 주문은 해서 결제는 됐는데 결과는 처리 안 되면 안 되서 트랜잭션 추가
     def create(self, validated_data):
         get_carts = validated_data.pop("get_carts", []) # 앞의 값 가져와서 없으면 [] 로 넘겨줌.
         order_list = OrderListModel(**validated_data)
