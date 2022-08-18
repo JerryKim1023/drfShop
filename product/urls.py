@@ -36,6 +36,6 @@ urlpatterns = [
 	path('review/<int:id>', ReviewChangeDelete.as_view(), name="review"), # 2 review 수정,삭제 / 댓글 id 받아옴
 
 	# Product_thumbnail
-	path('thumbnail/<int:id>', ProductThumbnailView.as_view(), name='thumbnail_view'), # 어드민용 썸네일뷰 함수
+	path('thumbnail/<obj_id>', ProductThumbnailView.as_view(), name='thumbnail_view'), # 어드민용 썸네일뷰 함수
 
 ]

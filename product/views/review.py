@@ -14,11 +14,11 @@ class ReviewByProduct(APIView):
     permission_classes = [permissions.AllowAny]
     #상품별로 상품에 대해서 review 정보 가져오고
 
-    def get(self, request, obj_id):  # 상품 id 받아옴
+    def get(self, request, id):  # 상품 id 받아옴
         # product = ProductModel.objects.get(id=obj_id)
         # data = request.data.dict()
         # data['product'] = obj_id
-        reviews = ReviewModel.objects.filter(product_id=obj_id)
+        reviews = ReviewModel.objects.filter(product_id=id)
         # product = ProductModel.objects.all().order_by('?').first()
         print(reviews)
         serialized_review_data = ReviewSerializer(reviews, many=True).data # 오브젝트를 넣어서 직렬화해주기
